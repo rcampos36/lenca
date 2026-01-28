@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fontsource/barlow-condensed": "^5.1.0",
+    "react-icons": "^5.4.0",
+    "@fontsource/gilda-display": "^5.1.0",
     "next": "latest",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

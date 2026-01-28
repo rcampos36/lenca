@@ -7,7 +7,46 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        "flip-x": {
+          "0%": { transform: "scaleX(1)" },
+          "50%": { transform: "scaleX(-1)" },
+          "100%": { transform: "scaleX(1)" },
+        },
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        "fade-out": {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
+        },
+        "enter-from-left": {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+      },
+      animation: {
+        "flip-x": "flip-x 0.8s ease-in-out",
+        "fade-in": "fade-in 1s ease-in-out forwards",
+        "fade-out": "fade-out 1s ease-in-out forwards",
+        "enter-from-left": "enter-from-left 0.4s ease-out forwards",
+      },
+      fontFamily: {
+        gilda: ["var(--font-gilda)", "serif"],
+        "barlow-c": ["var(--font-barlow-c)", "sans-serif"],
+      },
+      colors: {
+        header: {
+          bg: "#0f0f0f",
+          fg: "#f5f0e8",
+          mute: "#a39e94",
+          accent: "#c9a962",
+          "accent-hover": "#d4b978",
+        },
+      },
+    },
   },
   plugins: [],
 };
