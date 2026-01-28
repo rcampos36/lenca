@@ -1,0 +1,107 @@
+"use client";
+
+import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
+
+export function LaDolceVita() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsVisible(entry.isIntersecting);
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -30px 0px" }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  const transitionClasses = "transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]";
+  const visibleClasses = "translate-y-0 opacity-100";
+  const hiddenClasses = "translate-y-12 opacity-0";
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative -mt-[100px] bg-[#111] py-24 px-6 sm:px-8 lg:py-32"
+      aria-labelledby="la-dolce-vita-heading"
+    >
+      <div className="mx-auto max-w-7xl">
+        {/* Top decorative emblem and gold lines */}
+        <div
+          className={`flex items-center justify-center gap-4 mb-12 ${transitionClasses} ${
+            isVisible ? visibleClasses : hiddenClasses
+          }`}
+          style={{ transitionDelay: isVisible ? "400ms" : "0ms" }}
+        >
+          <span className="h-0.5 w-24 bg-[#c9a962]/70 sm:w-36 lg:w-48" aria-hidden />
+          <span className="text-[#c9a962]" aria-hidden>
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="h-10 w-10 opacity-90 sm:h-12 sm:w-12 lg:h-14 lg:w-14"
+              aria-hidden
+            >
+              <path d="M12 2L10 8h4L12 2zm0 6l-2 6h4l-2-6zm0 6l-2 6h4l-2-6z" />
+            </svg>
+          </span>
+          <span className="h-0.5 w-24 bg-[#c9a962]/70 sm:w-36 lg:w-48" aria-hidden />
+        </div>
+
+        {/* Grid: text 1/3, image 2/3 on large screens */}
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16 lg:items-stretch">
+          {/* Left column - text (1/3) */}
+          <div
+            className={`flex flex-col justify-center ${transitionClasses} ${
+              isVisible ? visibleClasses : hiddenClasses
+            }`}
+            style={{ transitionDelay: isVisible ? "500ms" : "0ms" }}
+          >
+            <p className="font-barlow-c text-sm font-medium uppercase tracking-[0.2em] text-[#f5f0e8] flex items-center gap-3 mb-4">
+              <span className="h-px w-8 bg-[#c9a962]" aria-hidden />
+              LA DOLCE VITA
+              <span className="h-px w-8 bg-[#c9a962]" aria-hidden />
+            </p>
+            <h2
+              id="la-dolce-vita-heading"
+              className="font-gilda text-4xl font-normal leading-tight text-[#f5f0e8] sm:text-5xl lg:text-5xl xl:text-6xl mb-6"
+            >
+              Love for Italian Food. Mamma Mia!
+            </h2>
+            <p className="font-barlow text-lg leading-relaxed text-[#f5f0e8]/90 max-w-xl">
+              From classic pasta dishes to delectable seafood specialties, our menu
+              showcases the vibrant flavors and rich traditions of Italian cuisine.
+            </p>
+          </div>
+
+          {/* Right column - image (2/3 of row) */}
+          <div
+            className={`relative w-full min-h-[320px] sm:min-h-[400px] lg:aspect-[4/3] lg:min-h-0 overflow-hidden rounded-lg shadow-xl ${transitionClasses} ${
+              isVisible ? visibleClasses : hiddenClasses
+            }`}
+            style={{ transitionDelay: isVisible ? "600ms" : "0ms" }}
+          >
+            <div className="absolute inset-0">
+              <Image
+                src="/images/Bolognese.webp"
+                alt="Spaghetti bolognese with fresh basil and cherry tomatoes"
+                fill
+                className="object-cover"
+                sizes="(min-width: 1024px) 66vw, 100vw"
+                priority={false}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
