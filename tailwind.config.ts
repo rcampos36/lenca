@@ -26,15 +26,26 @@ const config: Config = {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(0)" },
         },
+        "menu-in": {
+          "0%": { opacity: "0", transform: "translateY(-100%)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "menu-out": {
+          "0%": { opacity: "1", transform: "translateY(0)" },
+          "100%": { opacity: "0", transform: "translateY(-100%)" },
+        },
       },
       animation: {
         "flip-x": "flip-x 0.8s ease-in-out",
         "fade-in": "fade-in 1s ease-in-out forwards",
         "fade-out": "fade-out 1s ease-in-out forwards",
         "enter-from-left": "enter-from-left 0.4s ease-out forwards",
+        "menu-in": "menu-in 0.4s ease-out forwards",
+        "menu-out": "menu-out 0.4s ease-out forwards",
       },
       fontFamily: {
         gilda: ["var(--font-gilda)", "serif"],
+        barlow: ["var(--font-barlow)", "sans-serif"],
         "barlow-c": ["var(--font-barlow-c)", "sans-serif"],
       },
       colors: {

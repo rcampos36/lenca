@@ -1,4 +1,6 @@
 @import "@fontsource/gilda-display/400.css";
+@import "@fontsource/barlow/200.css";
+@import "@fontsource/barlow/400.css";
 @import "@fontsource/barlow-condensed/500.css";
 @import "@fontsource/barlow-condensed/600.css";
 @import "@fontsource/barlow-condensed/700.css";
@@ -10,6 +12,7 @@
 @layer base {
   :root {
     --font-gilda: "Gilda Display", serif;
+    --font-barlow: "Barlow", sans-serif;
     --font-barlow-c: "Barlow Condensed", sans-serif;
   }
   body {

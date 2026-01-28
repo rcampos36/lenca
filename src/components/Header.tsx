@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 function CrestLogo() {
@@ -47,8 +48,44 @@ function MenuIcon() {
   );
 }
 
+function CloseIcon() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M18 6L6 18M6 6l12 12" />
+    </svg>
+  );
+}
+
+const MENU_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About Us" },
+  { href: "/menu", label: "Menu" },
+  { href: "/events", label: "Events" },
+  { href: "/blog", label: "Blog" },
+  { href: "/contact", label: "Contact Us" },
+] as const;
+
 export function Header() {
+  const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const [pendingHref, setPendingHref] = useState<string | null>(null);
+
+  const requestClose = (href?: string) => {
+    if (href) setPendingHref(href);
+    setIsClosing(true);
+  };
+
+  const handleMenuEnd = () => {
+    if (!isClosing) return;
+    setOpen(false);
+    setIsClosing(false);
+    if (pendingHref) {
+      router.push(pendingHref);
+      setPendingHref(null);
+    }
+  };
 
   return (
     <>
@@ -75,34 +112,40 @@ export function Header() {
             </Link>
             <button
               type="button"
-              onClick={() => setOpen((o) => !o)}
-              className="text-header-accent transition-opacity hover:opacity-80 lg:hidden"
+              onClick={() => (open ? requestClose() : setOpen(true))}
+              className="text-header-accent transition-opacity hover:opacity-80"
               aria-expanded={open}
-              aria-label="Menu"
+              aria-label={open ? "Close menu" : "Open menu"}
             >
-              <MenuIcon />
+              {open ? <CloseIcon /> : <MenuIcon />}
             </button>
           </div>
         </div>
       </header>
 
       {open && (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-            aria-hidden
-            onClick={() => setOpen(false)}
-          />
-          <nav
-            className="fixed right-0 top-0 z-50 flex h-full w-64 flex-col gap-4 bg-black/90 px-6 pt-24 lg:hidden"
-            aria-label="Mobile menu"
-          >
-            <Link href="/" className="font-gilda text-lg text-white hover:text-header-accent" onClick={() => setOpen(false)}>Home</Link>
-            <Link href="/menu" className="font-gilda text-lg text-white hover:text-header-accent" onClick={() => setOpen(false)}>Menu</Link>
-            <Link href="/about" className="font-gilda text-lg text-white hover:text-header-accent" onClick={() => setOpen(false)}>About</Link>
-            <Link href="/contact" className="font-gilda text-lg text-white hover:text-header-accent" onClick={() => setOpen(false)}>Contact</Link>
-          </nav>
-        </>
+        <nav
+          className={`fixed inset-0 z-40 flex flex-col items-center justify-center gap-14 bg-header-bg ${isClosing ? "animate-menu-out" : "animate-menu-in"}`}
+          aria-label="Mobile menu"
+          onAnimationEnd={handleMenuEnd}
+        >
+          {MENU_LINKS.map(({ href, label }) => {
+            const isActive = pathname === href;
+            return (
+              <Link
+                key={href + label}
+                href={href}
+                className={`font-barlow text-5xl font-extralight uppercase tracking-widest transition-colors hover:text-header-accent ${isActive ? "text-header-accent" : "text-white"}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  requestClose(href);
+                }}
+              >
+                {label}
+              </Link>
+            );
+          })}
+        </nav>
       )}
     </>
   );
