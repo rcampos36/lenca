@@ -40,19 +40,25 @@ function CartIcon() {
   );
 }
 
-function MenuIcon() {
+function MenuCloseIcon({ open }: { open: boolean }) {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M18 6L6 18M6 6l12 12" />
-    </svg>
+    <span className="relative block h-6 w-6" aria-hidden>
+      <span
+        className={`absolute left-0 h-0.5 w-6 rounded-full bg-current transition-all duration-300 ease-in-out origin-center ${
+          open ? "top-1/2 -translate-y-1/2 rotate-45" : "top-1.5"
+        }`}
+      />
+      <span
+        className={`absolute left-0 top-1/2 h-0.5 w-6 -translate-y-1/2 rounded-full bg-current transition-all duration-300 ease-in-out origin-center ${
+          open ? "opacity-0" : "opacity-100"
+        }`}
+      />
+      <span
+        className={`absolute left-0 h-0.5 w-6 rounded-full bg-current transition-all duration-300 ease-in-out origin-center ${
+          open ? "top-1/2 -translate-y-1/2 -rotate-45" : "bottom-1.5"
+        }`}
+      />
+    </span>
   );
 }
 
@@ -117,7 +123,7 @@ export function Header() {
               aria-expanded={open}
               aria-label={open ? "Close menu" : "Open menu"}
             >
-              {open ? <CloseIcon /> : <MenuIcon />}
+              <MenuCloseIcon open={open} />
             </button>
           </div>
         </div>
