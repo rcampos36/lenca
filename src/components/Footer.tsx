@@ -98,8 +98,9 @@ function EmailIcon() {
 
 export function Footer() {
   return (
-    <footer className="bg-[#1f1f1f] text-white font-barlow">
-      <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
+    <footer className="text-white font-barlow">
+      <div className="bg-[#212121]">
+        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {/* Column 1: Branding + Social */}
           <div className="space-y-4">
@@ -185,6 +186,7 @@ export function Footer() {
               </p>
             </address>
           </div>
+        </div>
         </div>
       </div>
 
