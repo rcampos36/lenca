@@ -3,6 +3,7 @@ import { Features } from "@/components/Features";
 import { OurStory } from "@/components/OurStory";
 import { LaDolceVita } from "@/components/LaDolceVita";
 import { ContentCarousel } from "@/components/ContentCarousel";
+import { OurMenu } from "@/components/OurMenu";
 import { OurChef } from "@/components/OurChef";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
       <LaDolceVita />
       <OurChef />
       <ContentCarousel />
+      <OurMenu />
     </main>
   );
 }
