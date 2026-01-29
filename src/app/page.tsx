@@ -7,6 +7,8 @@ import { OurMenu } from "@/components/OurMenu";
 import { WineSelection } from "@/components/WineSelection";
 import { OurChef } from "@/components/OurChef";
 import { CustomerReviews } from "@/components/CustomerReviews";
+import { HomeBlogSection } from "@/components/HomeBlogSection";
+import { BookATable } from "@/components/BookATable";
 import { ScrollToHash } from "@/components/ScrollToHash";
 
 export default function Home() {
@@ -22,6 +24,8 @@ export default function Home() {
       <OurMenu />
       <WineSelection />
       <CustomerReviews />
+      <HomeBlogSection />
+      <BookATable />
     </main>
   );
 }
