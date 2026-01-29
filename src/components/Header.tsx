@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function CrestLogo() {
   return (
@@ -64,8 +64,8 @@ function MenuCloseIcon({ open }: { open: boolean }) {
 
 const MENU_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About Us" },
-  { href: "/menu", label: "Menu" },
+  { href: "/#our-story-heading", label: "About Us" },
+  { href: "/#our-menu-heading", label: "Menu" },
   { href: "/events", label: "Events" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact Us" },
@@ -74,9 +74,17 @@ const MENU_LINKS = [
 export function Header() {
   const router = useRouter();
   const pathname = usePathname();
+  const [hash, setHash] = useState("");
   const [open, setOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [pendingHref, setPendingHref] = useState<string | null>(null);
+
+  useEffect(() => {
+    setHash(typeof window !== "undefined" ? window.location.hash : "");
+    const onHashChange = () => setHash(window.location.hash);
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, [pathname]);
 
   const requestClose = (href?: string) => {
     if (href) setPendingHref(href);
@@ -136,7 +144,10 @@ export function Header() {
           onAnimationEnd={handleMenuEnd}
         >
           {MENU_LINKS.map(({ href, label }) => {
-            const isActive = pathname === href;
+            const [path, anchor] = href.split("#");
+            const isActive =
+              pathname === (path || "/") &&
+              (!anchor || hash === `#${anchor}`);
             return (
               <Link
                 key={href + label}

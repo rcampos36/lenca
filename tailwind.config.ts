@@ -34,6 +34,10 @@ const config: Config = {
           "0%": { opacity: "1", transform: "translateY(0)" },
           "100%": { opacity: "0", transform: "translateY(-100%)" },
         },
+        "fade-in-up": {
+          "0%": { opacity: "0", transform: "translateY(24px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "flip-x": "flip-x 0.8s ease-in-out",
@@ -42,6 +46,7 @@ const config: Config = {
         "enter-from-left": "enter-from-left 0.4s ease-out forwards",
         "menu-in": "menu-in 0.4s ease-out forwards",
         "menu-out": "menu-out 0.4s ease-out forwards",
+        "fade-in-up": "fade-in-up 0.7s ease-out forwards",
       },
       fontFamily: {
         gilda: ["var(--font-gilda)", "serif"],

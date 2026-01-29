@@ -7,10 +7,12 @@ import { OurMenu } from "@/components/OurMenu";
 import { WineSelection } from "@/components/WineSelection";
 import { OurChef } from "@/components/OurChef";
 import { CustomerReviews } from "@/components/CustomerReviews";
+import { ScrollToHash } from "@/components/ScrollToHash";
 
 export default function Home() {
   return (
     <main className="min-h-screen">
+      <ScrollToHash />
       <Hero />
       <Features />
       <OurStory />
