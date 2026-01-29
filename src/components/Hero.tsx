@@ -116,6 +116,7 @@ type Phase = "idle" | "out" | "in";
 export function Hero() {
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("idle");
+  const [initialFadeDone, setInitialFadeDone] = useState(false);
   const [prevFlip, setPrevFlip] = useState(false);
   const [nextFlip, setNextFlip] = useState(false);
   const [arrowReEntering, setArrowReEntering] = useState(false);
@@ -190,7 +191,18 @@ export function Hero() {
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 py-32 text-center sm:px-8">
           <div
             key={`${phase}-${index}`}
-            className={`flex w-full max-w-2xl flex-col items-center ${phase === "out" ? "animate-fade-out" : ""} ${phase === "in" ? "animate-fade-in" : ""}`}
+            className={`flex w-full max-w-2xl flex-col items-center ${
+              !initialFadeDone && phase === "idle"
+                ? "animate-fade-in-up"
+                : phase === "out"
+                  ? "animate-fade-out"
+                  : phase === "in"
+                    ? "animate-fade-in"
+                    : ""
+            }`}
+            onAnimationEnd={() => {
+              if (!initialFadeDone && phase === "idle") setInitialFadeDone(true);
+            }}
           >
             <SlideContent
               slide={current}
