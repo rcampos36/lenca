@@ -4,6 +4,7 @@ import { OurStory } from "@/components/OurStory";
 import { LaDolceVita } from "@/components/LaDolceVita";
 import { ContentCarousel } from "@/components/ContentCarousel";
 import { OurMenu } from "@/components/OurMenu";
+import { WineSelection } from "@/components/WineSelection";
 import { OurChef } from "@/components/OurChef";
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       <OurChef />
       <ContentCarousel />
       <OurMenu />
+      <WineSelection />
     </main>
   );
 }
