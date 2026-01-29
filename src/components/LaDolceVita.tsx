@@ -14,7 +14,7 @@ export function LaDolceVita() {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          setIsVisible(entry.isIntersecting);
+          if (entry.isIntersecting) setIsVisible(true);
         });
       },
       { threshold: 0.1, rootMargin: "0px 0px -30px 0px" }
