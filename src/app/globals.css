@@ -4,6 +4,7 @@
 @import "@fontsource/barlow-condensed/500.css";
 @import "@fontsource/barlow-condensed/600.css";
 @import "@fontsource/barlow-condensed/700.css";
+@import url("https://fonts.googleapis.com/css2?family=Allura&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -14,6 +15,7 @@
     --font-gilda: "Gilda Display", serif;
     --font-barlow: "Barlow", sans-serif;
     --font-barlow-c: "Barlow Condensed", sans-serif;
+    --font-allura: "Allura", cursive;
   }
   body {
     font-feature-settings: "kern" 1, "liga" 1;

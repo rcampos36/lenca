@@ -1,6 +1,7 @@
 import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
 import { LaDolceVita } from "@/components/LaDolceVita";
+import { OurChef } from "@/components/OurChef";
 import { OurStory } from "@/components/OurStory";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <Features />
       <OurStory />
       <LaDolceVita />
+      <OurChef />
     </main>
   );
 }

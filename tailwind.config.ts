@@ -47,6 +47,7 @@ const config: Config = {
         gilda: ["var(--font-gilda)", "serif"],
         barlow: ["var(--font-barlow)", "sans-serif"],
         "barlow-c": ["var(--font-barlow-c)", "sans-serif"],
+        allura: ["var(--font-allura)", "cursive"],
       },
       colors: {
         header: {
