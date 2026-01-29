@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Italiano Ristorante",
@@ -17,6 +18,7 @@ export default function RootLayout({
       <body className="min-h-screen antialiased font-gilda bg-[#111] text-white">
         <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );

@@ -111,9 +111,9 @@ export function Header() {
 
           <Link
             href="/"
-            className="font-gilda text-3xl tracking-wide text-header-accent text-white font-bold sm:text-3xl"
+            className="font-allura text-7xl tracking-wide text-header-accent text-white"
           >
-            LENCA
+            Lenca
           </Link>
 
           <div className="flex items-center gap-5">
