@@ -6,6 +6,7 @@ import { ContentCarousel } from "@/components/ContentCarousel";
 import { OurMenu } from "@/components/OurMenu";
 import { WineSelection } from "@/components/WineSelection";
 import { OurChef } from "@/components/OurChef";
+import { CustomerReviews } from "@/components/CustomerReviews";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <ContentCarousel />
       <OurMenu />
       <WineSelection />
+      <CustomerReviews />
     </main>
   );
 }
