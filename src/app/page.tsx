@@ -1,8 +1,9 @@
 import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
-import { LaDolceVita } from "@/components/LaDolceVita";
-import { OurChef } from "@/components/OurChef";
 import { OurStory } from "@/components/OurStory";
+import { LaDolceVita } from "@/components/LaDolceVita";
+import { ContentCarousel } from "@/components/ContentCarousel";
+import { OurChef } from "@/components/OurChef";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <OurStory />
       <LaDolceVita />
       <OurChef />
+      <ContentCarousel />
     </main>
   );
 }
