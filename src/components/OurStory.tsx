@@ -4,6 +4,8 @@ import React from "react";
 import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 
+const STORY_MOBILE_BREAKPOINT = 1024; // below this: no timeline, no line, no markers
+
 const STORY_BLOCKS = [
   {
     id: "01",
@@ -37,12 +39,22 @@ export function OurStory() {
   const [parallaxOffset, setParallaxOffset] = useState(0);
   const [lineHeight, setLineHeight] = useState(0);
   const [lineStartTop, setLineStartTop] = useState(0);
+  const [isMobileLayout, setIsMobileLayout] = useState(true);
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${STORY_MOBILE_BREAKPOINT - 1}px)`);
+    const handleChange = (e: MediaQueryListEvent) => setIsMobileLayout(e.matches);
+    setIsMobileLayout(mq.matches);
+    mq.addEventListener("change", handleChange);
+    return () => mq.removeEventListener("change", handleChange);
+  }, []);
+
   useEffect(() => {
     const section = sectionRef.current;
     const container = containerRef.current;
     const firstMarker = firstMarkerRef.current;
     const lastMarker = lastMarkerRef.current;
-    if (!section || !container || !firstMarker || !lastMarker) return;
+    if (!section || !container || !firstMarker || !lastMarker || isMobileLayout) return;
 
     const updateScroll = () => {
       const rect = section.getBoundingClientRect();
@@ -100,7 +112,7 @@ export function OurStory() {
       window.removeEventListener("scroll", updateScroll);
       window.removeEventListener("resize", updateScroll);
     };
-  }, []);
+  }, [isMobileLayout]);
 
   return (
     <section
@@ -131,9 +143,9 @@ export function OurStory() {
           </p>
         </header>
 
-        {/* Single line: positioned behind markers - outside grid to fix stacking */}
+        {/* Single line: hidden on mobile, no animated line or markers */}
         <div
-          className="pointer-events-none absolute left-6 top-0 h-full w-12 sm:left-8 sm:w-16 lg:left-0 lg:w-48"
+          className="pointer-events-none absolute left-6 top-0 hidden h-full w-12 sm:left-8 sm:w-16 lg:left-0 lg:block lg:w-48"
           aria-hidden
           style={{ zIndex: 0 }}
         >
@@ -153,14 +165,14 @@ export function OurStory() {
           </div>
         </div>
 
-        {/* Grid: 3 rows × 2 cols; each row = timeline cell (marker centered) + content. Line in col 1 from bottom of 01 to center of 03. */}
+        {/* Grid: on mobile single column (image + text only); on lg timeline + content */}
         <div className="relative grid grid-cols-1 gap-x-8 gap-y-0 lg:grid-cols-[12rem_1fr] lg:gap-x-12">
           {STORY_BLOCKS.map((block, index) => (
             <React.Fragment key={block.id}>
-              {/* Timeline cell: marker aligned with middle of image - must be above line */}
+              {/* Timeline cell: hidden on mobile, no markers */}
               <div
                 ref={index === 0 ? firstMarkerRef : index === 2 ? lastMarkerRef : null}
-                className="relative flex min-h-[220px] items-start justify-center py-8 lg:min-h-[280px] lg:py-0"
+                className="relative hidden min-h-[220px] items-start justify-center py-8 lg:flex lg:min-h-[280px] lg:py-0"
                 style={{ zIndex: 10, position: 'relative' }}
               >
                 <div 
@@ -184,13 +196,13 @@ export function OurStory() {
                 </div>
               </div>
 
-              {/* Content cell: image first, then text (alternate title/description order) */}
-              <div className={`flex min-h-[220px] flex-col pb-16 lg:min-h-[280px] lg:pb-24 ${index === 2 ? "-mt-[100px]" : ""}`}>
-                <div className="relative h-[400px] w-full overflow-hidden lg:h-[500px]">
+              {/* Content cell: image first, then text */}
+              <div className={`flex min-h-0 flex-col pb-12 lg:min-h-[280px] lg:pb-24 ${index === 2 ? "lg:-mt-[100px]" : ""}`}>
+                <div className="relative h-[280px] w-full overflow-hidden sm:h-[340px] lg:h-[500px]">
                   <div
                     className="absolute inset-0 transition-transform duration-75 ease-out"
                     style={{
-                      transform: `translateY(${parallaxOffset * (index % 2 === 0 ? 0.3 : -0.2)}px)`,
+                      transform: isMobileLayout ? "none" : `translateY(${parallaxOffset * (index % 2 === 0 ? 0.3 : -0.2)}px)`,
                     }}
                   >
                     <Image
@@ -202,24 +214,24 @@ export function OurStory() {
                     />
                   </div>
                 </div>
-                <div className="mt-6 flex items-center gap-4 px-28 lg:mt-8 lg:gap-6">
+                <div className="mt-4 flex flex-col gap-3 px-0 sm:flex-row sm:items-center sm:gap-4 lg:mt-8 lg:gap-6 lg:px-28">
                   {index % 2 === 0 ? (
                     <>
-                      <h3 className="flex-shrink-0 text-left font-gilda text-3xl font-normal text-[#f5f0e8] sm:text-4xl lg:text-5xl">
+                      <h3 className="flex-shrink-0 text-left font-gilda text-2xl font-normal text-[#f5f0e8] sm:text-3xl sm:text-4xl lg:text-5xl">
                         {block.heading}
                       </h3>
-                      <span className="h-full w-px shrink-0 self-stretch bg-[#c9a962]" aria-hidden />
-                      <p className="flex-1 text-left font-barlow leading-relaxed text-[#a39e94]" style={{ fontSize: '24px' }}>
+                      <span className="hidden h-full w-px shrink-0 self-stretch bg-[#c9a962] lg:block" aria-hidden />
+                      <p className="flex-1 text-left font-barlow leading-relaxed text-[#a39e94] text-base sm:text-lg lg:text-[24px]">
                         {block.body}
                       </p>
                     </>
                   ) : (
                     <>
-                      <p className="flex-1 text-right font-barlow leading-relaxed text-[#a39e94]" style={{ fontSize: '24px' }}>
+                      <p className="flex-1 text-left font-barlow leading-relaxed text-[#a39e94] sm:text-right lg:text-right text-base sm:text-lg lg:text-[24px]">
                         {block.body}
                       </p>
-                      <span className="h-full w-px shrink-0 self-stretch bg-[#c9a962]" aria-hidden />
-                      <h3 className="flex-shrink-0 text-left font-gilda text-3xl font-normal text-[#f5f0e8] sm:text-4xl lg:text-5xl">
+                      <span className="hidden h-full w-px shrink-0 self-stretch bg-[#c9a962] lg:block" aria-hidden />
+                      <h3 className="flex-shrink-0 text-left font-gilda text-2xl font-normal text-[#f5f0e8] sm:text-3xl sm:text-4xl lg:text-5xl">
                         {block.heading}
                       </h3>
                     </>

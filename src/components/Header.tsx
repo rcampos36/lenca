@@ -111,7 +111,7 @@ export function Header() {
 
           <Link
             href="/"
-            className="font-allura text-7xl tracking-wide text-header-accent text-white"
+            className="font-allura text-4xl tracking-wide text-header-accent text-white sm:text-5xl md:text-6xl lg:text-7xl"
           >
             Lenca
           </Link>

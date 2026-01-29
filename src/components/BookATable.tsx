@@ -37,7 +37,7 @@ export function BookATable() {
       aria-labelledby="book-a-table-heading"
     >
       {/* Full-bleed background image */}
-      <div className="absolute inset-0 h-full min-h-[680px]">
+      <div className="absolute inset-0 h-full min-h-[520px] sm:min-h-[600px] lg:min-h-[680px]">
         <Image
           src="/images/slide-2.webp"
           alt="Elegant restaurant interior with tables and warm ambiance"
@@ -94,7 +94,7 @@ export function BookATable() {
       </div>
 
       {/* Centered content: no form container background */}
-      <div className="relative z-10 flex min-h-[680px] flex-col items-center justify-center px-6 py-16 text-center">
+      <div className="relative z-10 flex min-h-[520px] flex-col items-center justify-center px-4 py-12 text-center sm:min-h-[600px] sm:px-6 sm:py-16 lg:min-h-[680px]">
         {/* GET IN TOUCH with lines — centered */}
         <div
           className={`flex items-center justify-center gap-3 ${transitionClasses} ${

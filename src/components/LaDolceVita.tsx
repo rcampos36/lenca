@@ -6,6 +6,15 @@ import Image from "next/image";
 export function LaDolceVita() {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const handle = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+    mq.addEventListener("change", handle);
+    return () => mq.removeEventListener("change", handle);
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -35,27 +44,6 @@ export function LaDolceVita() {
       aria-labelledby="la-dolce-vita-heading"
     >
       <div className="mx-auto max-w-7xl">
-        {/* Top decorative emblem and gold lines */}
-        <div
-          className={`flex items-center justify-center gap-4 mb-12 ${transitionClasses} ${
-            isVisible ? visibleClasses : hiddenClasses
-          }`}
-          style={{ transitionDelay: isVisible ? "400ms" : "0ms" }}
-        >
-          <span className="h-0.5 w-24 bg-[#c9a962]/70 sm:w-36 lg:w-48" aria-hidden />
-          <span className="text-[#c9a962]" aria-hidden>
-            <svg
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="h-10 w-10 opacity-90 sm:h-12 sm:w-12 lg:h-14 lg:w-14"
-              aria-hidden
-            >
-              <path d="M12 2L10 8h4L12 2zm0 6l-2 6h4l-2-6zm0 6l-2 6h4l-2-6z" />
-            </svg>
-          </span>
-          <span className="h-0.5 w-24 bg-[#c9a962]/70 sm:w-36 lg:w-48" aria-hidden />
-        </div>
-
         {/* Grid: text 1/3, image 2/3 on large screens */}
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16 lg:items-stretch">
           {/* Left column - text (1/3) */}
@@ -100,10 +88,10 @@ export function LaDolceVita() {
               />
             </div>
             <div
-              className="absolute inset-0 z-10 bg-[#ffcf82] transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              className={`absolute inset-0 z-10 bg-[#ffcf82] ${isMobile ? "" : "transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]"}`}
               style={{
                 transform: isVisible ? "translateY(-100%)" : "translateY(0)",
-                transitionDelay: isVisible ? "1300ms" : "0ms",
+                transitionDelay: isMobile ? "0ms" : isVisible ? "1300ms" : "0ms",
               }}
               aria-hidden
             />

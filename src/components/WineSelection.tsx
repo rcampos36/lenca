@@ -75,21 +75,39 @@ export function WineSelection() {
       aria-labelledby="wine-selection-heading"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        {/* Wine bottle at top on mobile only */}
+        <div
+          className={`relative mx-auto mb-10 min-h-[200px] w-full max-w-[200px] lg:hidden ${transitionClasses} ${
+            isVisible ? visibleClasses : hiddenClasses
+          }`}
+          style={{ transitionDelay: isVisible ? "0ms" : "0ms" }}
+        >
+          <Image
+            src="/images/Italianwine3.webp"
+            alt="Wine bottle"
+            fill
+            className="object-contain object-center"
+            sizes="200px"
+            priority={false}
+          />
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16 items-stretch">
-          {/* Left: Wine bottle image - same height as content */}
+          {/* Left: Wine bottle image - desktop only (on mobile shown at top above) */}
           <div
-            className={`relative min-h-[280px] lg:min-h-0 max-w-[280px] mx-auto lg:mx-0 lg:max-w-none lg:h-full lg:w-full ${transitionClasses} ${
+            className={`relative hidden min-h-[280px] lg:block lg:min-h-0 lg:max-w-none lg:h-full lg:w-full ${transitionClasses} ${
               isVisible ? visibleClasses : hiddenClasses
             }`}
             style={{ transitionDelay: isVisible ? "0ms" : "0ms" }}
           >
             <Image
               src="/images/Italianwine3.webp"
-              alt="Wine bottle"
+              alt=""
               fill
               className="object-contain object-center"
-              sizes="(max-width: 1024px) 280px, 33vw"
+              sizes="33vw"
               priority={false}
+              aria-hidden
             />
           </div>
 

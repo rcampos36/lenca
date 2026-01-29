@@ -104,11 +104,21 @@ export function ContentCarousel() {
   const goNextRef = useRef(goNext);
   goNextRef.current = goNext;
 
-  // Auto-advance every 5 seconds
+  const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const handle = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+    mq.addEventListener("change", handle);
+    return () => mq.removeEventListener("change", handle);
+  }, []);
+
+  // Auto-advance every 5 seconds on desktop only (skip on mobile for performance)
+  useEffect(() => {
+    if (isMobile) return;
     const interval = setInterval(() => goNextRef.current(), 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isMobile]);
 
   const slide = SLIDES[index]!;
 

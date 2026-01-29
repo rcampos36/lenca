@@ -6,6 +6,15 @@ import Image from "next/image";
 export function OurChef() {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    const handle = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+    mq.addEventListener("change", handle);
+    return () => mq.removeEventListener("change", handle);
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -94,10 +103,10 @@ export function OurChef() {
               priority={false}
             />
             <div
-              className="absolute inset-0 z-10 bg-[#ffcf82] transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              className={`absolute inset-0 z-10 bg-[#ffcf82] ${isMobile ? "" : "transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]"}`}
               style={{
                 transform: isVisible ? "translateY(-100%)" : "translateY(0)",
-                transitionDelay: isVisible ? "1250ms" : "0ms",
+                transitionDelay: isMobile ? "0ms" : isVisible ? "1250ms" : "0ms",
               }}
               aria-hidden
             />

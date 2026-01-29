@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useCallback, useRef, useEffect } from "react";
 
 const TRANSITION_MS = 1000;
+const MOBILE_BREAKPOINT = 768; // single slide, no nav below this
 
 const SLIDES = [
   {
@@ -91,13 +92,13 @@ function SlideContent({
         <br />
         {slide.heading[1]}
       </h1>
-      <p className="mt-6 max-w-lg font-gilda text-2xl leading-relaxed text-white/95 sm:text-lg">
+      <p className="mt-6 max-w-lg font-gilda text-base leading-relaxed text-white/95 sm:text-lg md:text-2xl">
         {slide.description}
       </p>
       {showLink && (
         <Link
           href="/about"
-          className="group font-barlow-c mt-10 inline-flex h-[78px] w-[280px] items-center justify-center gap-8 overflow-hidden rounded-lg border border-[#A68B5B] bg-[#1A1A1A] px-6 py-4 text-[20px] font-semibold uppercase leading-none tracking-wide text-white transition-colors hover:border-[#B89B6B] hover:bg-[#252525]"
+          className="group font-barlow-c mt-10 inline-flex h-14 w-full max-w-[280px] items-center justify-center gap-6 overflow-hidden rounded-lg border border-[#A68B5B] bg-[#1A1A1A] px-5 py-3 text-base font-semibold uppercase leading-none tracking-wide text-white transition-colors hover:border-[#B89B6B] hover:bg-[#252525] sm:h-[78px] sm:max-w-[280px] sm:gap-8 sm:px-6 sm:py-4 sm:text-[20px]"
           onMouseLeave={onButtonMouseLeave}
         >
           Learn more
@@ -120,7 +121,16 @@ export function Hero() {
   const [prevFlip, setPrevFlip] = useState(false);
   const [nextFlip, setNextFlip] = useState(false);
   const [arrowReEntering, setArrowReEntering] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+    const handleChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mq.matches);
+    mq.addEventListener("change", handleChange);
+    return () => mq.removeEventListener("change", handleChange);
+  }, []);
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
@@ -163,45 +173,60 @@ export function Hero() {
 
   useEffect(() => () => clearTimer(), [clearTimer]);
 
-  const current = SLIDES[index]!;
+  const current = isMobile ? SLIDES[0]! : SLIDES[index]!;
 
   const handleButtonMouseLeave = useCallback(() => setArrowReEntering(true), []);
   const handleArrowAnimationEnd = useCallback(() => setArrowReEntering(false), []);
 
+  const showTransition =
+    !isMobile &&
+    (!initialFadeDone && phase === "idle"
+      ? "animate-fade-in-up"
+      : phase === "out"
+        ? "animate-fade-out"
+        : phase === "in"
+          ? "animate-fade-in"
+          : "");
+
   return (
     <section className="relative min-h-screen overflow-x-hidden">
       <div className="absolute inset-0">
-        {SLIDES.map((slide, i) => (
+        {isMobile ? (
           <Image
-            key={slide.src}
-            src={slide.src}
+            key={SLIDES[0].src}
+            src={SLIDES[0].src}
             alt=""
             fill
-            className={`object-cover transition-opacity duration-1000 ease-in-out ${
-              i === index ? "opacity-100" : "pointer-events-none opacity-0"
-            }`}
-            priority={i === 0}
+            className="object-cover object-center"
+            priority
             sizes="100vw"
           />
-        ))}
+        ) : (
+          SLIDES.map((slide, i) => (
+            <Image
+              key={slide.src}
+              src={slide.src}
+              alt=""
+              fill
+              className={`object-cover transition-opacity duration-1000 ease-in-out ${
+                i === index ? "opacity-100" : "pointer-events-none opacity-0"
+              }`}
+              priority={i === 0}
+              sizes="100vw"
+            />
+          ))
+        )}
         <div className="absolute inset-0 bg-black/50" aria-hidden />
       </div>
 
       <div className="relative min-h-screen">
         <div className="absolute inset-0 flex flex-col items-center justify-center px-6 py-32 text-center sm:px-8">
           <div
-            key={`${phase}-${index}`}
-            className={`flex w-full max-w-2xl flex-col items-center ${
-              !initialFadeDone && phase === "idle"
-                ? "animate-fade-in-up"
-                : phase === "out"
-                  ? "animate-fade-out"
-                  : phase === "in"
-                    ? "animate-fade-in"
-                    : ""
-            }`}
+            key={isMobile ? "mobile" : `${phase}-${index}`}
+            className={`flex w-full max-w-2xl flex-col items-center ${showTransition}`}
             onAnimationEnd={() => {
-              if (!initialFadeDone && phase === "idle") setInitialFadeDone(true);
+              if (!initialFadeDone && phase === "idle" && !isMobile)
+                setInitialFadeDone(true);
             }}
           >
             <SlideContent
@@ -215,38 +240,42 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="absolute inset-y-0 left-0 flex items-center">
-        <button
-          type="button"
-          onClick={goPrev}
-          onMouseLeave={() => setPrevFlip(true)}
-          className="group flex h-60 w-60 -translate-x-1/4 origin-center items-center justify-center rounded-full border border-white/50 bg-transparent transition-[transform,background-color,border-color] duration-500 ease-in-out delay-0 hover:scale-150 hover:border-white/50 hover:delay-500"
-          aria-label="Previous slide"
-        >
-          <span
-            className={`inline-flex origin-center opacity-50 transition-transform duration-500 ease-in-out group-hover:translate-x-2 ${prevFlip ? "animate-flip-x" : ""}`}
-            onAnimationEnd={() => setPrevFlip(false)}
-          >
-            <Image src="/images/LeftArrow.png" alt="" width={60} height={20} className="object-contain" aria-hidden />
-          </span>
-        </button>
-      </div>
-      <div className="absolute inset-y-0 right-0 flex items-center justify-end">
-        <button
-          type="button"
-          onClick={goNext}
-          onMouseLeave={() => setNextFlip(true)}
-          className="group flex h-60 w-60 translate-x-1/4 origin-center items-center justify-center rounded-full border border-white/50 bg-transparent transition-[transform,background-color,border-color] duration-500 ease-in-out delay-0 hover:scale-150 hover:border-white/50 hover:delay-500"
-          aria-label="Next slide"
-        >
-          <span
-            className={`inline-flex origin-center opacity-50 transition-transform duration-500 ease-in-out group-hover:-translate-x-2 ${nextFlip ? "animate-flip-x" : ""}`}
-            onAnimationEnd={() => setNextFlip(false)}
-          >
-            <Image src="/images/RightArrow.png" alt="" width={60} height={20} className="object-contain" aria-hidden />
-          </span>
-        </button>
-      </div>
+      {!isMobile && (
+        <>
+          <div className="absolute inset-y-0 left-0 flex items-center">
+            <button
+              type="button"
+              onClick={goPrev}
+              onMouseLeave={() => setPrevFlip(true)}
+              className="group flex h-[120px] w-[120px] -translate-x-1/4 origin-center items-center justify-center rounded-full border border-white/50 bg-transparent transition-[transform,background-color,border-color] duration-500 ease-in-out delay-0 hover:scale-150 hover:border-white/50 hover:delay-500 lg:h-60 lg:w-60"
+              aria-label="Previous slide"
+            >
+              <span
+                className={`inline-flex origin-center scale-50 opacity-50 transition-transform duration-500 ease-in-out group-hover:translate-x-2 lg:scale-100 ${prevFlip ? "animate-flip-x" : ""}`}
+                onAnimationEnd={() => setPrevFlip(false)}
+              >
+                <Image src="/images/LeftArrow.png" alt="" width={60} height={20} className="object-contain" aria-hidden />
+              </span>
+            </button>
+          </div>
+          <div className="absolute inset-y-0 right-0 flex items-center justify-end">
+            <button
+              type="button"
+              onClick={goNext}
+              onMouseLeave={() => setNextFlip(true)}
+              className="group flex h-[120px] w-[120px] translate-x-1/4 origin-center items-center justify-center rounded-full border border-white/50 bg-transparent transition-[transform,background-color,border-color] duration-500 ease-in-out delay-0 hover:scale-150 hover:border-white/50 hover:delay-500 lg:h-60 lg:w-60"
+              aria-label="Next slide"
+            >
+              <span
+                className={`inline-flex origin-center scale-50 opacity-50 transition-transform duration-500 ease-in-out group-hover:-translate-x-2 lg:scale-100 ${nextFlip ? "animate-flip-x" : ""}`}
+                onAnimationEnd={() => setNextFlip(false)}
+              >
+                <Image src="/images/RightArrow.png" alt="" width={60} height={20} className="object-contain" aria-hidden />
+              </span>
+            </button>
+          </div>
+        </>
+      )}
     </section>
   );
 }

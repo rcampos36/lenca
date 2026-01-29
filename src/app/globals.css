@@ -21,3 +21,17 @@
     font-feature-settings: "kern" 1, "liga" 1;
   }
 }
+
+/* On small screens and for reduced-motion: show content immediately, no animations */
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-fade-in,
+  .animate-fade-out,
+  .animate-flip-x,
+  .animate-enter-from-left,
+  .animate-reveal-slide-up {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
