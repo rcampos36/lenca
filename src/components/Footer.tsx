@@ -202,7 +202,7 @@ export function Footer() {
               rel="noopener noreferrer"
               className="underline hover:text-white/80"
             >
-              Roger Campos
+              RCDEV
             </a>
           </p>
         </div>
