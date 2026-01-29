@@ -84,10 +84,10 @@ export function LaDolceVita() {
 
           {/* Right column - image (2/3 of row) */}
           <div
-            className={`relative w-full min-h-[320px] sm:min-h-[400px] lg:aspect-[4/3] lg:min-h-0 overflow-hidden rounded-lg shadow-xl ${transitionClasses} ${
-              isVisible ? visibleClasses : hiddenClasses
+            className={`relative w-full min-h-[320px] sm:min-h-[400px] lg:aspect-[4/3] lg:min-h-0 overflow-hidden shadow-xl border-b-[0.5px] border-b-[#ffcf82] opacity-0 ${
+              isVisible ? "animate-fade-in-up [animation-fill-mode:forwards]" : ""
             }`}
-            style={{ transitionDelay: isVisible ? "600ms" : "0ms" }}
+            style={isVisible ? { animationDelay: "600ms" } : undefined}
           >
             <div className="absolute inset-0">
               <Image
@@ -99,6 +99,14 @@ export function LaDolceVita() {
                 priority={false}
               />
             </div>
+            <div
+              className="absolute inset-0 z-10 bg-[#ffcf82] transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              style={{
+                transform: isVisible ? "translateY(-100%)" : "translateY(0)",
+                transitionDelay: isVisible ? "1300ms" : "0ms",
+              }}
+              aria-hidden
+            />
           </div>
         </div>
       </div>

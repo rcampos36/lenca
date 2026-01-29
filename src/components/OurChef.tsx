@@ -80,10 +80,10 @@ export function OurChef() {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-start lg:gap-16">
           {/* Left column - chef image */}
           <div
-            className={`relative aspect-[3/4] w-full overflow-hidden rounded-lg shadow-xl ${transitionClasses} ${
-              isVisible ? visibleClasses : hiddenClasses
+            className={`relative aspect-[3/4] w-full overflow-hidden shadow-xl border-b-[0.5px] border-b-[#ffcf82] opacity-0 ${
+              isVisible ? "animate-fade-in-up [animation-fill-mode:forwards]" : ""
             }`}
-            style={{ transitionDelay: isVisible ? "550ms" : "0ms" }}
+            style={isVisible ? { animationDelay: "550ms" } : undefined}
           >
             <Image
               src="/images/Chef.webp"
@@ -92,6 +92,14 @@ export function OurChef() {
               className="object-cover object-center"
               sizes="(min-width: 1024px) 50vw, 100vw"
               priority={false}
+            />
+            <div
+              className="absolute inset-0 z-10 bg-[#ffcf82] transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              style={{
+                transform: isVisible ? "translateY(-100%)" : "translateY(0)",
+                transitionDelay: isVisible ? "1250ms" : "0ms",
+              }}
+              aria-hidden
             />
           </div>
 
