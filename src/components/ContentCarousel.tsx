@@ -46,10 +46,34 @@ const SLIDES = [
   },
 ];
 
+const transitionClasses =
+  "transition-[transform,opacity] duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]";
+const visibleClasses = "translate-y-0 opacity-100";
+const hiddenClasses = "translate-y-12 opacity-0";
+
 export function ContentCarousel() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState<"prev" | "next">("next");
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setIsVisible(true);
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -30px 0px" }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
 
   const goTo = useCallback(
     (nextIndex: number, dir: "prev" | "next") => {
@@ -90,13 +114,19 @@ export function ContentCarousel() {
 
   return (
     <section
+      ref={sectionRef}
       className="relative bg-[#111] py-16 sm:py-20 lg:py-24 overflow-hidden"
       aria-labelledby="carousel-heading"
       aria-roledescription="carousel"
     >
       <div className="mx-auto max-w-7xl px-6 sm:px-8">
         {/* Section header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+        <div
+          className={`text-center max-w-2xl mx-auto mb-12 sm:mb-16 ${transitionClasses} ${
+            isVisible ? visibleClasses : hiddenClasses
+          }`}
+          style={{ transitionDelay: isVisible ? "400ms" : "0ms" }}
+        >
           <p className="font-barlow-c text-[28px] font-medium uppercase tracking-[0.2em] text-[#c9a962] flex items-center justify-center gap-3 mb-4">
             <span className="h-px w-8 bg-[#c9a962]" aria-hidden />
             AUTHENTIC
@@ -114,7 +144,12 @@ export function ContentCarousel() {
         </div>
 
         {/* Carousel */}
-        <div className="relative">
+        <div
+          className={`relative ${transitionClasses} ${
+            isVisible ? visibleClasses : hiddenClasses
+          }`}
+          style={{ transitionDelay: isVisible ? "500ms" : "0ms" }}
+        >
           <div
             className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12 lg:items-center"
             style={{ minHeight: "400px" }}
